@@ -1,53 +1,31 @@
 package display;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.geometry.Dimension2D;
 
-import javax.swing.JFrame;
+public class Display extends Application {
 
-public class Display extends JFrame implements ActionListener{
+	private Dimension2D size = new Dimension2D(1000, 600);
 
-	private static final long serialVersionUID = 1L;
-	private Dimension size = new Dimension(1000,600);
-		
-	public Display() {
-		super("my game");
-		this.setSize(1000,600);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocation(300,200);
-		this.setVisible(true);
-		this.setting();
-		this.getContentPane().add(new Game());
-		this.pack();
+	public static void main(String[] args) {
+		launch(args);
 	}
-	
-	private void setting() {
-		this.setTitle("Assari game");
-		this.setSize(size);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLocation(280,100);
-		this.setVisible(true);
-	}
-	
-	private void removeContent() {
-		this.getContentPane().removeAll();
-		this.getContentPane().repaint();
-	}
-	
-	public void endGame(long point) {
-		removeContent();
-		this.getContentPane().add(new Menu(point,this));
-	}
-	
+
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getActionCommand().equals("restart")) {
-			removeContent();
-			Game game = new Game();
-			this.getContentPane().add(game);
-			game.requestFocus();
-		}
+	public void start(Stage primaryStage) {
+		primaryStage.setTitle("My Game");
+		primaryStage.setWidth(size.getWidth());
+		primaryStage.setHeight(size.getHeight());
+
+		StackPane root = new StackPane();
+		primaryStage.setScene(new Scene(root));
+
+		Game game = new Game();
+		root.getChildren().add(game);
+
+		primaryStage.show();
 	}
-	
 }

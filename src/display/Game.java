@@ -1,143 +1,85 @@
 package display;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.File;
-import java.io.IOException;
+import Charactor.Dog;
+import Charactor.Environment;
+import Charactor.Wave;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
-import Charactor.*;
-import Element.Element;
-import event.Event;
+import static com.sun.webkit.graphics.WCImage.getImage;
 
-public class Game extends JPanel implements KeyListener{
+public class Game extends Pane {
+	private static final int SPEED = 50;
+	private static final int DOG_SIZE = 60;
+	private static final int WAVE_HEIGHT = 50;
+	private static final int BASE = 400;
+	private static final int X_START = 1000;
+	public Canvas canvas;
 
-	private static final long serialVersionUID = 1L;
-	
-	private static int speed = 50,dogSize = 60 ,waveHeight = 50;
-	private static int base=400,xStart = 1000;
-	private long point = 0,lastPress=0;
-	
-	private Dog dog = new Dog(100,base-50);
-	static Display display;
-//	------------------Wave SIze ----------------------------
-	private Wave[] waveSet = makeWave(4);
-//--------------------Cloud--------------------------------
-	private Environment[] envSet = makeEnv(2,Environment.CLOUD);
-	private Environment building = new Environment(xStart-100,base-150,this,Environment.BUILDING,4);
-	
-		public Game(){
-		this.setBounds(0,0,1000,600);
-		this.addKeyListener(this);
-		this.setLayout(null);
-		this.setFocusable(true);
+	private long point = 0;
+	private long lastPress = 0;
+	private Dog dog = new Dog(100, BASE - 50);
+	private Wave[] waves;
+	private Environment background;
+
+	public Game() {
+		this.setPrefSize(1000, 600);
+		canvas = new Canvas(1000, 600);
+		getChildren().add(canvas);
+		canvas.setFocusTraversable(true);
+		canvas.setOnKeyPressed(e -> keyPressed(e.getCode()));
+
+		// สร้างอาร์เรย์ของ Wave ด้วย Canvas และตำแหน่งเริ่มต้น
+		waves = makeWave(3); // สร้าง Wave 3 ตัวเพื่อต่อเนื่อง
+
+		// สร้างพื้นหลัง
+		background = new Environment(100, 100, 1, 0);
+		//Environment kot = new Environment(0,0,0,0);
+
+		background.createAnimation(this);
+		//kot.createAnimation(this);
+
+		draw(); // วาดสถานะเริ่มต้น
 	}
-	
-	@Override
-	public void paint(Graphics g) {
-			try {
-				super.paint(g);
-				Graphics2D g2 = (Graphics2D) g;
-				this.drawBackground(g2);
-				//---POINT----
-				g2.setFont(Element.getFont(30));
-				g2.setColor(Color.white);
-				g2.drawString("Point : "+point,750,40);
-				//--- dog --
-				g2.setColor(Color.RED);
-				drawDogHealth(g2);
-				g2.drawImage(dog.getImage(),dog.x,dog.y,dogSize,dogSize, null);
-				//----Wave----
-				for(Wave item : waveSet) {
-					drawWave(item,g2);
-				}
-				this.point+=1;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	}
-	private void drawBackground(Graphics2D g2) throws IOException {
-			g2.drawImage(ImageIO.read(new File("img//sky.png")),0,0,2000,1000, null);
-			g2.drawImage(building.getImage(),building.x,building.y,500,200,null);
-			g2.drawImage(ImageIO.read(new File("img//dir.png")),0,base+10,2000,220, null);
-			for(Environment item:envSet) {
-				g2.drawImage(item.getImage(),item.x,item.y,250,160, null);
-			}
-	}
-	
-	private void drawDogHealth(Graphics2D g2) {
-		try {
-			g2.drawImage(ImageIO.read(new File("img//heart.png")),10,20, 20,20,null);
-			g2.setStroke(new BasicStroke(18.0f));
-			g2.setColor(new Color(241, 98, 69));
-			g2.drawLine(60, 30,60+dog.health,30);	
-			g2.setColor(Color.white);
-			g2.setStroke(new BasicStroke(6.0f));
-			g2.drawRect(50,20, 200,20);
-		} catch (IOException e) {
-			e.printStackTrace();
+
+	private void draw() {
+		// วาดพื้นหลัง
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		Image backgroundImage = Environment.getImage();
+
+
+
+		// วาดทุกอย่างบน Canvas
+		for (Wave wave : waves) {
+			wave.render(gc);
 		}
+
+		// วาดหมา
+		gc.drawImage(dog.getImage(), dog.getX(), dog.getY(), 70, 70);
 	}
-	
+
 	private Wave[] makeWave(int size) {
 		Wave[] waveSet = new Wave[size];
 		int far = 500;
-		for(int i=0;i<size;i++) {
-			waveSet[i] = new Wave(xStart+far,base,speed,this);
-			far+=500;
+		for (int i = 0; i < size; i++) {
+			waveSet[i] = new Wave(800 + far * i, 300, 20, canvas);
 		}
 		return waveSet;
 	}
-	
-	private Environment[] makeEnv(int size,int eType){
-		Environment[] envSet = new Environment[size];
-		int far = 0;
-		for(int i=0;i<size;i++) {
-			envSet[i] = new Environment(xStart+far,20,this,eType,10);
-			far+=600;
-		}
-		return envSet;
-	}
 
-	private void drawWave(Wave wave,Graphics2D g2) {
-		g2.drawImage(wave.getImage(),wave.x ,(wave.y-waveHeight),40,waveHeight+10,null);
-		if(Event.checkHit(dog,wave,dogSize,waveHeight)){
-			g2.setColor(new Color(241, 98, 69));
-			g2.fillRect(0, 0,1000,1000);
-			dog.health-=20;
-			if(dog.health<=0) {
-				display.endGame(this.point);
-				dog.health = new Dog().health;
-				this.point = 0;
+	private void keyPressed(KeyCode e) {
+		// จัดการกับการกดคีย์
+		if (System.currentTimeMillis() - lastPress > 600) {
+			if (e == KeyCode.SPACE || e == KeyCode.UP) {
+				dog.jump(canvas);
+				lastPress = System.currentTimeMillis();
 			}
 		}
-	}
-	
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if(System.currentTimeMillis() - lastPress > 600) {
-			if(e.getKeyCode()==32||e.getKeyCode()==38) {
-					dog.jump(this);
-					lastPress = System.currentTimeMillis();
-			}
-		}
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		//---
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		//---
-	}
-	
-	public static void main(String[] arg) {
-		 display = new Display();
 	}
 }
-

@@ -1,47 +1,50 @@
 package Charactor;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class Wave {
-		public int speed;
-		public int x;
-		public int y;
-		Timer timeMove;
-		public Wave(int x,int y,int speed,JPanel page) {
-			this.x = x;
-			this.y = y;
-			this.speed = speed;
-			this.move(page);
+	private int speed;
+	private double x;
+	private double y;
+	private Image image;
+
+	public Wave(double x, double y, int speed, Canvas canvas) {
+		this.x = x;
+		this.y = y;
+		this.speed = speed;
+
+		try {
+			this.image = new Image(new FileInputStream("img/tree.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		}
-		
-		public void move(JPanel page) {
-				 this.timeMove = new Timer(speed,new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-							if(x<=0) {
-								x = (int) (1000+(300+Math.random()*1000));
-							}
-							x -= 30;
-							page.repaint();
-					}
-				});
-				 this.timeMove.start();
+	}
+
+	public void move() {
+		x -= speed;
+		if (x <= -image.getWidth()) {
+			x = 1000 + (300 + Math.random() * 1000);
 		}
-		
-		public BufferedImage getImage() {
-			BufferedImage image = null;
-			try {
-				 image = ImageIO.read(new File("img//tree.png"));
-				 return image;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return image;
-		}
+	}
+
+	public void render(GraphicsContext gc) {
+		gc.drawImage(image, x, y);
+	}
+
+	public Image getImage() {
+		return image;
+	}
+
+	public double getX() {
+		return x;
+	}
+
+	public double getY() {
+		return y;
+	}
 }

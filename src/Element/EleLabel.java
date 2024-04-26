@@ -1,14 +1,15 @@
 package Element;
 
-import javax.swing.JLabel;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 
-public class EleLabel extends JLabel {
+public class EleLabel extends Label {
 
-	private static final long serialVersionUID = 1L;
-		
-		public EleLabel(String title,int size,int x,int y,int w,int h) {
-			 super(title);
-			 setFont(Element.getFont(size));
-			 setBounds(x,y,w,h);
-		}
+	public EleLabel(String title, int size, double x, double y, double w, double h) {
+		super(title);
+		setFont(new Font(size));
+		setLayoutX(x);
+		setLayoutY(y);
+		setPrefSize(w, h);
+	}
 }

@@ -1,47 +1,47 @@
 package display;
 
-import java.awt.Color;
-import java.awt.event.ActionListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
-import javax.swing.JPanel;
+public class Menu extends StackPane {
 
-import Element.EleButton;
-import Element.EleLabel;
+	private long point;
 
-public class Menu extends JPanel {
+	public Menu(long point) {
+		this.point = point;
+		this.setBackground(new javafx.scene.layout.Background(new javafx.scene.layout.BackgroundFill(Color.rgb(241, 98, 69), null, null)));
 
-		private static final long serialVersionUID = 1L;
-		public long point;
-		
-		public Menu() {
-			//----
-		}
-		
-		public Menu(long point,ActionListener main) {
-			try {
-					this.setPoint(point);
-					this.setBackground(new Color(241, 98, 69));
-					this.setBounds(0,0,1000,600);
-					this.setFocusable(true);
-					this.setLayout(null);
-					
-					EleLabel status = new EleLabel("You Died!",40,400,100,200,100);
-					status.setForeground(Color.white);
-					
-					EleLabel showPoint = new EleLabel("Total : "+this.point,30,400,200,200,100);
-					showPoint.setForeground(Color.white);
-										
-					EleButton restart = new EleButton("restart",15,380,300,200,50);
-					restart.addActionListener(main);		
-					
-					this.add(showPoint);
-					this.add(status);
-					this.add(restart);
-			} catch (Exception e) {
-				e.printStackTrace();
+		Text status = new Text("You Died!");
+		status.setFont(Font.font("Arial", 40));
+		status.setFill(Color.WHITE);
+		status.setTranslateY(-100);
+
+		Text showPoint = new Text("Total : " + this.point);
+		showPoint.setFont(Font.font("Arial", 30));
+		showPoint.setFill(Color.WHITE);
+
+		Button restart = new Button("Restart");
+		restart.setFont(Font.font("Arial", 15));
+		restart.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (onRestart != null) {
+					onRestart.handle(event);
+				}
 			}
-			
-		}
+		});
+
+		this.getChildren().addAll(status, showPoint, restart);
+		StackPane.setAlignment(status, Pos.TOP_CENTER);
+		StackPane.setAlignment(showPoint, Pos.CENTER);
+		StackPane.setAlignment(restart, Pos.BOTTOM_CENTER);
+	}
 
 	public long getPoint() {
 		return point;
@@ -49,5 +49,11 @@ public class Menu extends JPanel {
 
 	public void setPoint(long point) {
 		this.point = point;
+	}
+
+	private EventHandler<ActionEvent> onRestart;
+
+	public void setOnRestart(EventHandler<ActionEvent> handler) {
+		this.onRestart = handler;
 	}
 }
