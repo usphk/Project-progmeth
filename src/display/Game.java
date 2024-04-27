@@ -2,12 +2,13 @@ package display;
 
 import Player.Dog;
 import sceen.Environment;
-import sceen.Wave;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import sceen.Wave;
 
 public class Game extends Pane {
 	private static final int SPEED = 50;
@@ -16,11 +17,12 @@ public class Game extends Pane {
 	private static final int BASE = 400;
 	private static final int X_START = 1000;
 	public Canvas canvas;
+	Wave wave = new Wave(100, BASE-50, 10, canvas);
 
 	private long point = 0;
 	private long lastPress = 0;
-	private Dog dog = new Dog(100, BASE - 50);
-	private Wave[] waves;
+	private Dog dog = new Dog(100, BASE -50);
+
 	private Environment background;
 
 	public Game() {
@@ -30,17 +32,25 @@ public class Game extends Pane {
 		canvas.setFocusTraversable(true);
 		canvas.setOnKeyPressed(e -> keyPressed(e.getCode()));
 
-		// สร้างอาร์เรย์ของ Wave ด้วย Canvas และตำแหน่งเริ่มต้น
-		waves = makeWave(3); // สร้าง Wave 3 ตัวเพื่อต่อเนื่อง
-
 		// สร้างพื้นหลัง
-		background = new Environment(100, 100, 1, 0);
-		//Environment kot = new Environment(0,0,0,0);
+		Environment tower= new Environment(100, 100, 1, 0);
+		Environment cloud = new Environment(400, 40, 0, 0);
+		Environment sky = new Environment(0,0,2,0);
+		Environment dir = new Environment(0,400,3,0);
 
-		background.createAnimation(this);
-		//kot.createAnimation(this);
+		sky.createAnimation(this);
+		tower.createAnimation(this);
+		cloud.createAnimation(this);
+		dir.createAnimation(this);
+
+
+		// เรียกเมธอด move() เพื่อเริ่มการเคลื่อนที่ของ Wave
+
+		wave.move(canvas);
+
 
 		draw(); // วาดสถานะเริ่มต้น
+
 	}
 
 	private void draw() {
@@ -48,24 +58,11 @@ public class Game extends Pane {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		Image backgroundImage = Environment.getImage();
 
-
-
-		// วาดทุกอย่างบน Canvas
-		for (Wave wave : waves) {
-			wave.render(gc);
-		}
+		// วาด wave
+		wave.render(gc);
 
 		// วาดหมา
 		gc.drawImage(dog.getImage(), dog.getX(), dog.getY(), 70, 70);
-	}
-
-	private Wave[] makeWave(int size) {
-		Wave[] waveSet = new Wave[size];
-		int far = 500;
-		for (int i = 0; i < size; i++) {
-			waveSet[i] = new Wave(800 + far * i, 300, 20, canvas);
-		}
-		return waveSet;
 	}
 
 	private void keyPressed(KeyCode e) {

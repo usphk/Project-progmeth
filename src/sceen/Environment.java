@@ -53,7 +53,7 @@ public class Environment {
 	}
 
 	private String getEvType(int eType) {
-		String[] name = new String[]{"cloud.png", "building.png"};
+		String[] name = new String[]{"cloud.png", "building.png","sky.png","dir.png"};
 		return name[eType];
 	}
 
