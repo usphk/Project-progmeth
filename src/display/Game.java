@@ -1,18 +1,13 @@
 package display;
 
-import Charactor.Dog;
-import Charactor.Environment;
-import Charactor.Wave;
+import Player.Dog;
+import sceen.Environment;
+import sceen.Wave;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-
-import static com.sun.webkit.graphics.WCImage.getImage;
 
 public class Game extends Pane {
 	private static final int SPEED = 50;

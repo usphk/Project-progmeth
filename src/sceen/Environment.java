@@ -1,4 +1,4 @@
-package Charactor;
+package sceen;
 
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
