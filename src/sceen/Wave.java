@@ -19,11 +19,13 @@ public class Wave {
 		this.y = y;
 		this.speed = speed;
 
+
 		try {
 			this.image = new Image(new FileInputStream("img/tree.png"));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		move(canvas);
 	}
 
 	public void move(Canvas canvas) {
@@ -34,8 +36,11 @@ public class Wave {
 				if (x <= 0) {
 					x = 1000 + (300 + Math.random() * 1000);
 				}
+				gc.clearRect(x, y, 50, 50);
 				x -= 30;
-				//gc.clearRect(1, 1, canvas.getWidth(), canvas.getHeight());
+				if (x + 50 <= 0) { // ตรวจสอบว่าคลื่นอยู่นอกขอบเขตซ้ายของ画面หรือไม่
+					stop(); // หยุดเคลื่อนที่เมื่อออกนอกขอบเขตซ้ายของ画面
+				}
 				render(gc);
 			}
 		};
@@ -43,6 +48,10 @@ public class Wave {
 	}
 
 	public void render(GraphicsContext gc) {
+		//gc.clearRect(1, 1, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+		; // เคลียรูปภาพที่กำลังวาดออกจาก Canvas
+
+
 		gc.drawImage(image, x, y, 50, 50);
 	}
 

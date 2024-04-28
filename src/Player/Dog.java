@@ -12,14 +12,17 @@ import java.io.FileNotFoundException;
 
 public class Dog {
 	private int x;
+	public int dogsize;
 	private int y;
-	private int health = 180;
+	public int health ;
 	private static int speed = 90;
 	private Image image;
 
-	public Dog(int x, int y) {
+	public Dog(int x, int y,int dogsize,int health) {
 		this.x = x;
 		this.y = y;
+		this.dogsize =dogsize;
+		this.health= health;
 		try {
 			this.image = new Image(new FileInputStream("img/dog.png"));
 		} catch (FileNotFoundException e) {
