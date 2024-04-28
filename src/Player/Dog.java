@@ -74,8 +74,15 @@ public class Dog {
 	}
 
 	private void draw(GraphicsContext gc, double size) {
-		gc.clearRect(1, 1, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.drawImage(image, x, y, size, size); // ใช้ขนาดที่ส่งเข้ามาในการวาดรูปภาพ
 	}
 
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
 }

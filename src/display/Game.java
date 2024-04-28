@@ -48,6 +48,7 @@ public class Game extends Pane {
 		// Start wave animation
 		//wave.move(canvas);
 
+
 		// Draw initial state
 		draw();
 	}
@@ -58,21 +59,22 @@ public class Game extends Pane {
 		// Draw background
 		// TODO: Draw background elements
 
-		// Draw wave
-		wave.render(gc);
-
 		// Draw dog
 		gc.drawImage(dog.getImage(), dog.getX(), dog.getY(), 70, 70);
 
-		gc.fillText("Health: " + dog.getHealth() + "%", 20, 20);
+		gc.setFill(Color.BLACK); // กำหนดสีของข้อความเป็นสีดำ
+		gc.fillText("Health: " + dog.getHealth() + "%", 200, 200); // แสดงข้อความ
+
+
 
 
 		// Check hit and draw red rectangle if hit
 		if (Event.checkHit(dog, wave, DOG_SIZE, WAVE_HEIGHT)) {
-			gc.setFill(Color.ALICEBLUE);
+			gc.setFill(Color.RED);
 			gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 			dog.setHealth(dog.getHealth() - 10);
 			gc.setFill(Color.BLACK);
+			dog.setX(dog.getX()); dog.setY(dog.getY());
 		}
 	}
 

@@ -9,16 +9,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class Wave {
-	private int speed;
+	public int speed;
 	private double x;
 	private double y;
 	private Image image;
+	public int wavesize = 50;
 
 	public Wave(double x, double y, int speed, Canvas canvas) {
 		this.x = x;
 		this.y = y;
 		this.speed = speed;
-
 
 		try {
 			this.image = new Image(new FileInputStream("img/tree.png"));
@@ -33,26 +33,28 @@ public class Wave {
 			@Override
 			public void handle(long now) {
 				GraphicsContext gc = canvas.getGraphicsContext2D();
+				clear(gc); // เคลียรูปร่างคลื่นก่อนที่จะวาดใหม่
+
 				if (x <= 0) {
 					x = 1000 + (300 + Math.random() * 1000);
 				}
-				gc.clearRect(x, y, 50, 50);
+
 				x -= 30;
-				if (x + 50 <= 0) { // ตรวจสอบว่าคลื่นอยู่นอกขอบเขตซ้ายของ画面หรือไม่
-					stop(); // หยุดเคลื่อนที่เมื่อออกนอกขอบเขตซ้ายของ画面
+				if (x + 50 <= 0) {
+					stop();
 				}
-				render(gc);
+				render(gc); // วาดคลื่นใหม่
 			}
 		};
 		animationTimer.start();
 	}
 
 	public void render(GraphicsContext gc) {
-		//gc.clearRect(1, 1, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-		; // เคลียรูปภาพที่กำลังวาดออกจาก Canvas
-
-
 		gc.drawImage(image, x, y, 50, 50);
+	}
+
+	public void clear(GraphicsContext gc) {
+		gc.clearRect(x, y, 50, 50);
 	}
 
 	public Image getImage() {
@@ -65,5 +67,9 @@ public class Wave {
 
 	public double getY() {
 		return y;
+	}
+
+	public double getWaveSize() {
+		return wavesize;
 	}
 }
