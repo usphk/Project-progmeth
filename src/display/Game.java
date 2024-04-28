@@ -69,13 +69,13 @@ public class Game extends Pane {
 
 
 		// Check hit and draw red rectangle if hit
-		if (Event.checkHit(dog, wave, DOG_SIZE, WAVE_HEIGHT)) {
-			gc.setFill(Color.RED);
-			gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-			dog.setHealth(dog.getHealth() - 10);
-			gc.setFill(Color.BLACK);
-			dog.setX(dog.getX()); dog.setY(dog.getY());
-		}
+//		if (Event.checkHit(dog, wave, DOG_SIZE, WAVE_HEIGHT)) {
+//			gc.setFill(Color.RED);
+//			gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+//			dog.setHealth(dog.getHealth() - 10);
+//			gc.setFill(Color.BLACK);
+//			dog.setX(dog.getX()); dog.setY(dog.getY());
+//		}
 	}
 
 	private void keyPressed(KeyCode e) {

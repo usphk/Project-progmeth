@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+
+
 public class Wave {
 	public int speed;
 	private double x;
@@ -55,6 +57,7 @@ public class Wave {
 
 	public void clear(GraphicsContext gc) {
 		gc.clearRect(x, y, 50, 50);
+
 	}
 
 	public Image getImage() {
