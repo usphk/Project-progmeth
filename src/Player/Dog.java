@@ -1,9 +1,9 @@
 package Player;
 
+import display.Game;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
@@ -12,17 +12,19 @@ import java.io.FileNotFoundException;
 
 public class Dog {
 	private int x;
-	public int dogsize;
+	private int dogSize;
 	private int y;
-	public int health ;
+	private int health;
 	private static int speed = 90;
 	private Image image;
+	private Game game;
 
-	public Dog(int x, int y,int dogsize,int health) {
+	public Dog(int x, int y, int dogSize, int health, Game game) {
 		this.x = x;
 		this.y = y;
-		this.dogsize =dogsize;
-		this.health= health;
+		this.dogSize = dogSize;
+		this.health = health;
+		this.game = game;
 		try {
 			this.image = new Image(new FileInputStream("img/dog.png"));
 		} catch (FileNotFoundException e) {
@@ -32,18 +34,17 @@ public class Dog {
 
 	public void jump(Canvas canvas) {
 		this.y -= speed;
-		draw(canvas.getGraphicsContext2D(), 70); // ส่งขนาดเข้าไปในเมธอด draw
+
+
 		// Fall
 		Timeline timeline = new Timeline(
 				new KeyFrame(Duration.millis(450), event -> {
 					y += speed;
-					draw(canvas.getGraphicsContext2D(), 70); // ส่งขนาดเข้าไปในเมธอด draw
+					game.draw(); // เรียกเมทอด draw() ในคลาส Game เพื่อวาดภาพหมาใหม่หลังจากกระโดด
 				})
 		);
 		timeline.play();
 	}
-
-
 
 	public int getX() {
 		return x;
@@ -71,11 +72,6 @@ public class Dog {
 
 	public static void setSpeed(int speed) {
 		Dog.speed = speed;
-	}
-
-	private void draw(GraphicsContext gc, double size) {
-		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-		gc.drawImage(image, x, y, size, size); // ใช้ขนาดที่ส่งเข้ามาในการวาดรูปภาพ
 	}
 
 	public void setX(int x) {
