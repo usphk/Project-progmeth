@@ -32,6 +32,10 @@ public class Dog {
 		}
 	}
 
+	public Dog() {
+
+	}
+
 	public void jump(Canvas canvas) {
 		this.y -= speed;
 
@@ -80,5 +84,10 @@ public class Dog {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public void resetHealth(int initialHealth) {
+
+			this.health = initialHealth;
 	}
 }
