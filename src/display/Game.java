@@ -23,12 +23,12 @@ public class Game extends Pane {
 	private static final int BASE = 400;
 
 	private Canvas canvas;
-	private Wave wave;
 	private Dog dog;
+	private Wave[] waveSet;
 
 	private long lastPress = 0;
 	public long point = 0;
-	private boolean gameOver = false; // สร้างตัวแปรเพื่อตรวจสอบว่าเกมจบหรือยัง
+	private boolean gameOver = false;
 
 	public Game() {
 		this.setPrefSize(1000, 600);
@@ -37,24 +37,37 @@ public class Game extends Pane {
 		canvas.setFocusTraversable(true);
 		canvas.setOnKeyPressed(e -> keyPressed(e.getCode()));
 
+		waveSet = makeWave(4);
+
 		// Create background elements
 		Environment tower = new Environment(100, 100, 1, 0);
 		Environment cloud = new Environment(530, 20, 0, 2);
 		Environment sky = new Environment(0, 0, 2, 0);
 		Environment dir = new Environment(0, 400, 3, 0);
 
-		//sky.createAnimation(this);
-		//tower.createAnimation(this);
 		cloud.createAnimation(this);
 		dir.createAnimation(this);
+		//dog
+		dog = new Dog(100, BASE - 50, 60, 200, this);
 
 		// Initialize game objects
-		wave = new Wave(100, BASE - 50, 10, 50, this,canvas); // ส่ง this เพื่อระบุว่า Game คืออ็อบเจกต์ปัจจุบันที่กำลังใช้งาน
-		dog = new Dog(100, BASE - 50, 60, 200,this );
+		for (Wave item : waveSet) {
 
-		// Draw initial state
-		draw();
+			item.setX(item.getX());
+			item.setY(item.getY());
+			draw();
 
+		}
+	}
+
+	private Wave[] makeWave(int size) {
+		Wave[] waveSet = new Wave[size];
+		int far = 500; // ระยะห่างระหว่างคลื่นแต่ละคลื่น
+
+		for (int i = 0; i < size; i++) {
+			waveSet[i] = new Wave(1000 + far, BASE-50, 30, 50, this, canvas);
+		}
+		return waveSet;
 	}
 
 	public void draw() {
@@ -71,22 +84,24 @@ public class Game extends Pane {
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.drawImage(dog.getImage(), dog.getX(), dog.getY(), 70, 70);
 
-		//
-		gc.drawImage(wave.getImage(), wave.getX(), wave.getY(), 50, 50);
+		// Draw waves
+		for (Wave item : waveSet) {
+			gc.drawImage(item.getImage(), item.getX(), item.getY(), 50, 50);
+			chon(item);
+		}
 
-		//point คะแนน
+		// Draw points
 		gc.setFont(Font.font("Arial", 30));
-		gc.setFill(Color.WHITE);
+		gc.setFill(Color.BLACK);
 		gc.fillText("Point: " + point, 750, 40);
 
 		// Check hit and draw red rectangle if hit
-		chon(); // เรียกเมทอด chon() เพื่อตรวจสอบการชนและลดเลือด
 		drawDogHealth();
 
 		this.point += 1;
 	}
 
-	private void chon() {
+	private void chon(Wave wave) {
 		if (gameOver) {
 			return; // ถ้าเกมจบแล้ว ให้หยุดการทำงานของ method นี้
 		}
@@ -95,15 +110,12 @@ public class Game extends Pane {
 			GraphicsContext gc = canvas.getGraphicsContext2D();
 			gc.setFill(Color.RED);
 			gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-			dog.setHealth(dog.getHealth() - 10);
+			dog.setHealth(dog.getHealth() - 1.2);
 			gc.setFill(Color.BLUE);
-			dog.setX(dog.getX());
-			dog.setY(dog.getY());
 
 			if (dog.getHealth() <= 0) {
 				endGame(this.point);
 				dog.resetHealth(0);
-				this.point = 0; // รีเซ็ตคะแนน
 				gameOver = true; // กำหนดว่าเกมจบแล้ว
 			}
 		}
@@ -118,7 +130,7 @@ public class Game extends Pane {
 			// Set color and draw health bar หลอดเลือด
 			gc.setStroke(Color.rgb(241, 98, 69));
 			gc.setLineWidth(16.0);
-			gc.strokeLine(110, 30, 60 + dog.getHealth()+40, 30);
+			gc.strokeLine(110, 30, 60 + dog.getHealth() + 40, 30);
 
 			// Draw rectangle border around health bar กรอบหลอดเลือด
 			gc.setStroke(Color.GREEN);

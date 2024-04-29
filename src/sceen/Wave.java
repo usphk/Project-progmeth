@@ -14,11 +14,13 @@ public class Wave {
 	private double y;
 	private Image image;
 	private int WaveSize;
+	int speed;
 	private Game game; // เก็บอ็อบเจกต์ Game เพื่อใช้ในการตรวจสอบการชน
 
 	public Wave(double x, double y, int speed,int waveSize, Game game,Canvas canvas) {
 		this.x = x;
 		this.y = y;
+		this.speed = speed;
 		this.WaveSize = waveSize;
 		this.game = game; // เก็บอ็อบเจกต์ Game
 
@@ -41,30 +43,12 @@ public class Wave {
 				if (x <= 0) {
 					x = 1000 + (300 + Math.random() * 1000);
 				}
-
-				x -= 30;
-				if (x + 50 <= 0) {
-					stop();
-				}
-
+				x -= speed;
 				game.draw();
 			}
 		};
 		animationTimer.start();
 	}
-
-	public void render(GraphicsContext gc) {
-		gc.drawImage(image, x, y, 50, 50);
-	}
-
-	public void clear(GraphicsContext gc) {
-		if (x == 100) {
-			// ใส่โค้ดที่ต้องการเคลียร์
-		} else {
-			gc.clearRect(x, y, 50, 50);
-		}
-	}
-
 	public Image getImage() {
 		return image;
 	}
@@ -79,5 +63,13 @@ public class Wave {
 
 	public double getWaveSize() {
 		return WaveSize;
+	}
+
+	public void setX(double x) {
+		this.x =x;
+	}
+
+	public void setY(double y) {
+		this.y=y;
 	}
 }

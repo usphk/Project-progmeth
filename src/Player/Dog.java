@@ -14,7 +14,7 @@ public class Dog {
 	private int x;
 	private int dogSize;
 	private int y;
-	private int health;
+	private double health;
 	private static int speed = 90;
 	private Image image;
 	private Game game;
@@ -58,7 +58,7 @@ public class Dog {
 		return y;
 	}
 
-	public int getHealth() {
+	public double getHealth() {
 		return health;
 	}
 
@@ -66,7 +66,7 @@ public class Dog {
 		return image;
 	}
 
-	public void setHealth(int health) {
+	public void setHealth(double health) {
 		this.health = health;
 	}
 
