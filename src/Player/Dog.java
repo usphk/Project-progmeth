@@ -90,4 +90,5 @@ public class Dog {
 
 			this.health = initialHealth;
 	}
+
 }

@@ -29,6 +29,8 @@ public class Game extends Pane {
 	private long lastPress = 0;
 	public long point = 0;
 	private boolean gameOver = false;
+	public int ol;
+	public boolean doghelth = false;
 
 	public Game() {
 		this.setPrefSize(1000, 600);
@@ -49,6 +51,8 @@ public class Game extends Pane {
 		dir.createAnimation(this);
 		//dog
 		dog = new Dog(100, BASE - 50, 60, 200, this);
+		final int ol = (int) dog.getHealth();
+
 
 		// Initialize game objects
 		for (Wave item : waveSet) {
@@ -65,7 +69,7 @@ public class Game extends Pane {
 		int far = 500; // ระยะห่างระหว่างคลื่นแต่ละคลื่น
 
 		for (int i = 0; i < size; i++) {
-			waveSet[i] = new Wave(1000 + far, BASE-50, 30, 50, this, canvas);
+			waveSet[i] = new Wave(1000 + far, BASE-50, 20, 50, this, canvas);
 		}
 		return waveSet;
 	}
@@ -82,7 +86,7 @@ public class Game extends Pane {
 
 		// Draw dog
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-		gc.drawImage(dog.getImage(), dog.getX(), dog.getY(), 70, 70);
+		gc.drawImage(dog.getImage(), dog.getX(), dog.getY(), 60, 60);
 
 		// Draw waves
 		for (Wave item : waveSet) {
@@ -94,6 +98,12 @@ public class Game extends Pane {
 		gc.setFont(Font.font("Arial", 30));
 		gc.setFill(Color.BLACK);
 		gc.fillText("Point: " + point, 750, 40);
+
+//		gc.setFont(Font.font("Arial", 30));
+//		gc.setFill(Color.BLACK);
+//		gc.fillText("Heal: " + dog.getHealth(), 200, 100);
+
+
 
 		// Check hit and draw red rectangle if hit
 		drawDogHealth();
@@ -110,8 +120,9 @@ public class Game extends Pane {
 			GraphicsContext gc = canvas.getGraphicsContext2D();
 			gc.setFill(Color.RED);
 			gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-			dog.setHealth(dog.getHealth() - 1.2);
-			gc.setFill(Color.BLUE);
+
+			// ลด health ของหมาทุกครั้ง
+			dog.setHealth(dog.getHealth() -1.2);
 
 			if (dog.getHealth() <= 0) {
 				endGame(this.point);
@@ -121,8 +132,17 @@ public class Game extends Pane {
 		}
 	}
 
+
 	private void drawDogHealth() {
+
+		if(doghelth == false){
+			 ol = (int) dog.getHealth();
+			 doghelth = true;
+			
+		}
+
 		GraphicsContext gc = canvas.getGraphicsContext2D();
+
 		try {
 			// Draw heart image
 			gc.drawImage(new Image(new FileInputStream("img/heart.png")), 40, 20, 30, 30);
@@ -135,7 +155,7 @@ public class Game extends Pane {
 			// Draw rectangle border around health bar กรอบหลอดเลือด
 			gc.setStroke(Color.GREEN);
 			gc.setLineWidth(6.0);
-			gc.strokeRect(100, 20, 300, 20);
+			gc.strokeRect(100, 20, ol+10, 20);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
