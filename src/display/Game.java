@@ -69,7 +69,7 @@ public class Game extends Pane {
 		int far = 500; // ระยะห่างระหว่างคลื่นแต่ละคลื่น
 
 		for (int i = 0; i < size; i++) {
-			waveSet[i] = new Wave(1000 + far, BASE-50, 50, 50, this);
+			waveSet[i] = new Wave(1000 + far, BASE-50, 30, 50, this);
 		}
 		return waveSet;
 	}
@@ -87,6 +87,7 @@ public class Game extends Pane {
 		// Draw dog
 		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.drawImage(dog.getImage(), dog.getX(), dog.getY(), 60, 60);
+
 
 		// Draw waves
 		for (Wave item : waveSet) {

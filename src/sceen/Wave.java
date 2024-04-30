@@ -61,6 +61,30 @@ public class Wave {
 		return y;
 	}
 
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
+	public void setWaveSize(int waveSize) {
+		WaveSize = waveSize;
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
 	public double getWaveSize() {
 		return WaveSize;
 	}
