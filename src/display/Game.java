@@ -69,7 +69,7 @@ public class Game extends Pane {
 		int far = 500; // ระยะห่างระหว่างคลื่นแต่ละคลื่น
 
 		for (int i = 0; i < size; i++) {
-			waveSet[i] = new Wave(1000 + far, BASE-50, 20, 50, this, canvas);
+			waveSet[i] = new Wave(1000 + far, BASE-50, 50, 50, this);
 		}
 		return waveSet;
 	}

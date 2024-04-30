@@ -17,7 +17,7 @@ public class Wave {
 	int speed;
 	private Game game; // เก็บอ็อบเจกต์ Game เพื่อใช้ในการตรวจสอบการชน
 
-	public Wave(double x, double y, int speed,int waveSize, Game game,Canvas canvas) {
+	public Wave(double x, double y, int speed,int waveSize, Game game) {
 		this.x = x;
 		this.y = y;
 		this.speed = speed;
