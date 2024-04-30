@@ -50,7 +50,7 @@ public class Game extends Pane {
 		cloud.createAnimation(this);
 		dir.createAnimation(this);
 		//dog
-		dog = new Dog(100, BASE - 50, 60, 200, this);
+		dog = new Dog(100, BASE - 50, 60, 400, this);
 		final int ol = (int) dog.getHealth();
 
 
@@ -150,12 +150,12 @@ public class Game extends Pane {
 			// Set color and draw health bar หลอดเลือด
 			gc.setStroke(Color.rgb(241, 98, 69));
 			gc.setLineWidth(16.0);
-			gc.strokeLine(110, 30, 60 + dog.getHealth() + 40, 30);
+			gc.strokeLine(100, 30, 60 + dog.getHealth() + 50, 30);
 
 			// Draw rectangle border around health bar กรอบหลอดเลือด
 			gc.setStroke(Color.GREEN);
 			gc.setLineWidth(6.0);
-			gc.strokeRect(100, 20, ol+10, 20);
+			gc.strokeRect(90, 20, ol+30, 20);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
